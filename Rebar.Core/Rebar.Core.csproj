@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageId>rebar.core</PackageId>
+    <Authors>Oxbow Software, Jakub Porębski</Authors>
+    <Copyright>Oxbow Software</Copyright>
+    <Owners>Oxbow Software</Owners>
+    <PackageReleaseNotes>Init</PackageReleaseNotes>
+    <Summary>Support for CQS</Summary>
+    <PackageTags>IoC</PackageTags>
+    <Title>rebar</Title>
+    <Description>Support for CQS</Description>
+    <ReleaseVersion>1.0.0</ReleaseVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Command\" />
+    <Folder Include="Query\" />
+    <Folder Include="Cancellation\" />
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="NuGet.Packaging.Core" Version="5.4.0" />
+  </ItemGroup>
+</Project>
