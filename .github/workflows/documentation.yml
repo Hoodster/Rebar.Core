@@ -32,4 +32,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: documentation
-        path: $(Build.ArtifactStagingDirectory)/docs/RebarCore.xml
+        path: ./docs/RebarCore.xml
