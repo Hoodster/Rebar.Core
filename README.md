@@ -22,7 +22,7 @@ private ICommandDispatcher _dispatcher;
 
 public Execute(ICommandDispatcher dispatcher)
 {
-  _dispatcher = dispatcher;
+    _dispatcher = dispatcher;
 }
 
 ...
@@ -35,12 +35,12 @@ _dispatcher.Execute(command);
 ```csharp
 public class SampleCommand : ICommand
 {
-  public string Name { get; set; }
+    public string Name { get; set; }
   
-  public SampleCommand(string name)
-  {
-    this.Name = name;
-  }
+    public SampleCommand(string name)
+    {
+        this.Name = name;
+    }
 }
 ```
 
@@ -48,11 +48,11 @@ public class SampleCommand : ICommand
 ```csharp
 public class SampleCommandHandler : ICommandHandler<SampleCommand>
 {
-  public void Execute(SampleCommand command)
-  {
-    command.Name // John
-    ...
-  }
+    public void Execute(SampleCommand command)
+    {
+        command.Name // John
+        ...
+    }
 }
 ```
 ### Queries
@@ -66,7 +66,7 @@ using Rebar.Core.Query
 private IQueryDispatcher _dispatcher
 public Execute(IQueryDispatcher dispatcher)
 {
-  _dispatcher = dispatcher;
+    _dispatcher = dispatcher;
 }
 
 ...
@@ -77,24 +77,24 @@ var result = _dispatcher.Execute(query); // result = { SubstractionResult: 4 }
 ```csharp
 public class SampleQuery : IQuery<SampleQueryResponse>
 {
-  public int BaseNumber { get; set; }
+    public int BaseNumber { get; set; }
   
-  public SampleQuery(int number)
-  {
-    this.BaseNumber = number;
-  }
+    public SampleQuery(int number)
+    {
+        this.BaseNumber = number;
+    }
 }
 ```
 #### SampleQueryResponse.cs
 ```csharp
 public class SampleQueryResponse : IQueryResponse
 {
-  public int SubstractionResult { get; set; }
+    public int SubstractionResult { get; set; }
   
-  public SampleQueryResponse(int result) 
-  {
-    this.SubstractionResult = result;
-  }
+    public SampleQueryResponse(int result) 
+    {
+        this.SubstractionResult = result;
+    }
 }
 ```
 
@@ -104,8 +104,8 @@ public class SampleQueryResponseHandler : IQueryHandler<SampleQuery, SampleQuery
 
 public SampleQueryResponse Execute(SampleQuery query)
 {
-  var substraction = query.BaseNumber - 6;
-  return new SampleQueryResponse(substraction);
+    var substraction = query.BaseNumber - 6;
+    return new SampleQueryResponse(substraction);
 }
 ```
 
@@ -117,7 +117,7 @@ ICommandHandler<ICommand> => IAsyncCommandHandler<ICommand>
 ```csharp
 public class SampleCommandHandler : ICommandHandler<SampleCommand>
 {
-  public void ExecuteAsync(SampleCommand command, CancellationToken token) {}
+    public void ExecuteAsync(SampleCommand command, CancellationToken token) {}
 }
 
 ...
@@ -132,7 +132,7 @@ IQueryHandler<IQuery, IQueryResponse> => IAsyncQueryHandler<IQuery, IQueryRespon
 ```csharp
 public class SampleQueryResponseHandler : IAsyncQueryHandler<SampleQuery, SampleQueryResponse>
 {
-  public Task<SampleQueryResponse> ExecuteAsync(SampleQuery query, CancellationToken token) {}
+    public Task<SampleQueryResponse> ExecuteAsync(SampleQuery query, CancellationToken token) {}
 }
 
 ...
@@ -141,4 +141,28 @@ _dispatcher.ExecuteAsync(query);
 ```
 
 ## Configuration
+In `startup.cs` include following line to include Rebar.Core in service collection.
+```csharp
+using Rebar.Core.Extensions;
 ...
+builder.AddRebarCore();
+```
+Next in AutoFac module files declare registering commands and/or queries.
+> ❗ **Important:** Handlers are name sensitive. They should end with "QueryHandler" or "CommandHandler" otherwise they won't be recognized.
+```csharp
+public class AppModule : Module
+{
+    protected override void Load(ContainerBuilder builder)
+    {
+        var executingAssembly = GetExecutingAssembly();
+        
+        // register commands within assembly
+        builder.RegisterCommandHandlers(executingAssembly);
+        
+        // register queries within assembly
+        builder.RegisterQueryHandlers(executingAssembly);
+        
+        // register both queries and commands within assembly
+        builder.RegisterAll();
+    }
+ }
