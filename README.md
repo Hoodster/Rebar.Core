@@ -1,4 +1,4 @@
-![license](https://img.shields.io/github/license/Hoodster/rebar.core)   ![nuget](https://img.shields.io/nuget/v/rebar.core) ![downloads](https://img.shields.io/nuget/dt/rebar.core)
+![license](https://img.shields.io/github/license/Hoodster/Rebar.Core)   ![nuget](https://img.shields.io/nuget/v/rebar.core) ![downloads](https://img.shields.io/nuget/dt/rebar.core)
 
 # rebar.core
 [NuGet library](https://www.nuget.org/packages/rebar.core/)  to support CQS pattern based project with Autofac implementation
