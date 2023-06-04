@@ -8,11 +8,19 @@ namespace Rebar.Core.Command
     public interface ICommandDispatcher : IDispatcher
     {
         /// <summary>
-        /// Command executor that takes command and resolves it with matching command handler.
+        /// Asynchronous command executor that takes command and resolves it with matching command handler.
         /// </summary>
         /// <typeparam name="TCommand"><see cref="ICommand"/></typeparam>
         /// <param name="command">Command.</param>
         /// <returns></returns>
         Task ExecuteAsync<TCommand>(TCommand command) where TCommand : ICommand;
+
+        /// <summary>
+        /// Command executor that takes command and resolves it with matching command handler.
+        /// </summary>
+        /// <typeparam name="TCommand"><see cref="ICommand"/></typeparam>
+        /// <param name="command">Command.</param>
+        /// <returns></returns>
+        void Execute<TCommand>(TCommand command) where TCommand : ICommand;
     }
 }
