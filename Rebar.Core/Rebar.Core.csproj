@@ -3,15 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageId>rebar.core</PackageId>
-    <Authors>Oxbow Software, Jakub Porębski</Authors>
-    <Copyright>Oxbow Software</Copyright>
-    <Owners>Oxbow Software</Owners>
+    <Authors>Jakub Porębski</Authors>
+    <Copyright>Jakub Porębski</Copyright>
+    <Owners>Jakub Porębski</Owners>
     <PackageReleaseNotes>Init</PackageReleaseNotes>
     <Summary>Support for CQS</Summary>
     <PackageTags>IoC</PackageTags>
     <Title>rebar</Title>
     <Description>Support for CQS</Description>
-    <ReleaseVersion>1.0.0</ReleaseVersion>
+    <ReleaseVersion>1.3.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 
