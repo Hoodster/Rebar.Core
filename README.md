@@ -110,7 +110,7 @@ public SampleQueryResponse Execute(SampleQuery query)
 ```
 
 ## Async operations
-Commands
+### Commands
 ```
 ICommandHandler<ICommand> => IAsyncCommandHandler<ICommand>
 ```
@@ -125,7 +125,7 @@ public class SampleCommandHandler : ICommandHandler<SampleCommand>
 _dispatcher.ExecuteAsync(command);
 ```
 
-Queries
+### Queries
 ```
 IQueryHandler<IQuery, IQueryResponse> => IAsyncQueryHandler<IQuery, IQueryResponse>
 ```
