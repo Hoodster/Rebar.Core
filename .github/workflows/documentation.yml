@@ -26,7 +26,7 @@ jobs:
 
     - name: Build and generate documentation
       run: |
-        dotnet build --configuration Release --no-restore /p:GenerateDocumentationFile=true /p:DocumentationFile=$(Build.ArtifactStagingDirectory)/docs/RebarCore.xml
+        dotnet build --configuration Release --no-restore /p:GenerateDocumentationFile=true /p:DocumentationFile=./docs/RebarCore.xml
         
     - name: Publish documentation artifacts
       uses: actions/upload-artifact@v2
