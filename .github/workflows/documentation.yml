@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-dotnet@v3.2.0
       with:
         dotnet-version: '6.0.x'
+        
+    - name: Create directory
+      run: mkdir -p ./docs/RebarCore.xml
 
     - name: Restore dependencies
       run: dotnet restore
