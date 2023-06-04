@@ -1,20 +1,168 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+![license](https://img.shields.io/github/license/Hoodster/rebar.core)   ![nuget](https://img.shields.io/nuget/v/rebar.core) ![downloads](https://img.shields.io/nuget/dt/rebar.core)
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# rebar.core
+[NuGet library](https://www.nuget.org/packages/rebar.core/)  to support CQS pattern based project with Autofac implementation
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Note
+Library is created for personal purposes but I decided that it can get useful for someone else so feel free to use.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## Features
+Library allows to provide simple command query separation inside project using AutoFac library.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Examples
+### Commands
+Commands are executed without results in return.
+#### Namespace
+``` csharp
+using Rebar.Core.Command
+```
+#### Execute
+```csharp
+private ICommandDispatcher _dispatcher;
+
+public Execute(ICommandDispatcher dispatcher)
+{
+    _dispatcher = dispatcher;
+}
+
+...
+
+var command = new SampleCommand("John");
+_dispatcher.Execute(command);
+
+```
+#### SampleCommand.cs
+```csharp
+public class SampleCommand : ICommand
+{
+    public string Name { get; set; }
+  
+    public SampleCommand(string name)
+    {
+        this.Name = name;
+    }
+}
+```
+
+#### SampleCommandHandler.cs
+```csharp
+public class SampleCommandHandler : ICommandHandler<SampleCommand>
+{
+    public void Execute(SampleCommand command)
+    {
+        command.Name // John
+        ...
+    }
+}
+```
+### Queries
+Queries are executed and return defined class object
+#### Namespace
+```csharp
+using Rebar.Core.Query
+```
+#### Execute
+```csharp
+private IQueryDispatcher _dispatcher
+public Execute(IQueryDispatcher dispatcher)
+{
+    _dispatcher = dispatcher;
+}
+
+...
+var query = new SampleQuery(10);
+var result = _dispatcher.Execute(query); // result = { SubstractionResult: 4 }
+```
+#### SampleQuery.cs
+```csharp
+public class SampleQuery : IQuery<SampleQueryResponse>
+{
+    public int BaseNumber { get; set; }
+  
+    public SampleQuery(int number)
+    {
+        this.BaseNumber = number;
+    }
+}
+```
+#### SampleQueryResponse.cs
+```csharp
+public class SampleQueryResponse : IQueryResponse
+{
+    public int SubstractionResult { get; set; }
+  
+    public SampleQueryResponse(int result) 
+    {
+        this.SubstractionResult = result;
+    }
+}
+```
+
+#### SampleQueryResponseHandler.cs
+```csharp
+public class SampleQueryResponseHandler : IQueryHandler<SampleQuery, SampleQueryResponse>
+
+public SampleQueryResponse Execute(SampleQuery query)
+{
+    var substraction = query.BaseNumber - 6;
+    return new SampleQueryResponse(substraction);
+}
+```
+
+## Async operations
+### Commands
+```
+ICommandHandler<ICommand> => IAsyncCommandHandler<ICommand>
+```
+```csharp
+public class SampleCommandHandler : ICommandHandler<SampleCommand>
+{
+    public void ExecuteAsync(SampleCommand command, CancellationToken token) {}
+}
+
+...
+
+_dispatcher.ExecuteAsync(command);
+```
+
+### Queries
+```
+IQueryHandler<IQuery, IQueryResponse> => IAsyncQueryHandler<IQuery, IQueryResponse>
+```
+```csharp
+public class SampleQueryResponseHandler : IAsyncQueryHandler<SampleQuery, SampleQueryResponse>
+{
+    public Task<SampleQueryResponse> ExecuteAsync(SampleQuery query, CancellationToken token) {}
+}
+
+...
+
+_dispatcher.ExecuteAsync(query);
+```
+
+## Configuration
+In `startup.cs` include following line to include Rebar.Core in service collection.
+```csharp
+using Rebar.Core.Extensions;
+...
+builder.AddRebarCore();
+```
+Next in AutoFac module files declare registering commands and/or queries.
+> ❗ **Important:** Handlers are name sensitive. They should end with "QueryHandler" or "CommandHandler" otherwise they won't be recognized.
+```csharp
+public class AppModule : Module
+{
+    protected override void Load(ContainerBuilder builder)
+    {
+        var executingAssembly = GetExecutingAssembly();
+        
+        // register commands within assembly
+        builder.RegisterCommandHandlers(executingAssembly);
+        
+        // register queries within assembly
+        builder.RegisterQueryHandlers(executingAssembly);
+        
+        // register both queries and commands within assembly
+        builder.RegisterAll();
+    }
+ }

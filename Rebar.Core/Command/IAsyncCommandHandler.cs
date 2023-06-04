@@ -7,12 +7,13 @@ namespace Rebar.Core.Command
     /// Asynchronous command handler interface.
     /// </summary>
     /// <typeparam name="TCommand">[<see cref="ICommand">ICommand</see>] Command.</typeparam>
-    public interface ICommandHandler<TCommand> : ICommandHandlerBase<TCommand> where TCommand : ICommand
+    public interface IAsyncCommandHandler<TCommand> : ICommandHandlerBase<TCommand> where TCommand : ICommand
     {
         /// <summary>
-        /// Describes how command is handled.
+        /// Describes how command is asynchronously handled.
         /// </summary>
         /// <param name="command">Command.</param>
-        void Execute(TCommand command);
+        /// <param name="token">Cancellation token instance.</param>
+        Task ExecuteAsync(TCommand command, CancellationToken token);
     }
 }
