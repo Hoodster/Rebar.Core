@@ -28,7 +28,7 @@ public Execute(ICommandDispatcher dispatcher)
 ...
 
 var command = new SampleCommand("John");
-await _dispatcher.ExecuteAsync(command);
+_dispatcher.Execute(command);
 
 ```
 #### SampleCommand.cs
@@ -48,7 +48,7 @@ public class SampleCommand : ICommand
 ```csharp
 public class SampleCommandHandler : ICommandHandler<SampleCommand>
 {
-  public async task ExecuteAsync(SampleCommand command, CancellationToken cancellationToken)
+  public void Execute(SampleCommand command)
   {
     command.Name // John
     ...
@@ -71,7 +71,7 @@ public Execute(IQueryDispatcher dispatcher)
 
 ...
 var query = new SampleQuery(10);
-var result = await _dispatcher.ExecuteAsync(query); // result = { SubstractionResult: 4 }
+var result = _dispatcher.Execute(query); // result = { SubstractionResult: 4 }
 ```
 #### SampleQuery.cs
 ```csharp
@@ -102,13 +102,43 @@ public class SampleQueryResponse : IQueryResponse
 ```csharp
 public class SampleQueryResponseHandler : IQueryHandler<SampleQuery, SampleQueryResponse>
 
-public async Task<SampleQueryResponse> ExecuteAsync(SampleQuery query, CancellationToken token)
+public SampleQueryResponse Execute(SampleQuery query)
 {
   var substraction = query.BaseNumber - 6;
-  return Task.FromResult(new SampleQueryResponse(substraction));
+  return new SampleQueryResponse(substraction);
 }
 ```
 
+## Async operations
+Commands
+```
+ICommandHandler<ICommand> => IAsyncCommandHandler<ICommand>
+```
+```csharp
+public class SampleCommandHandler : ICommandHandler<SampleCommand>
+{
+  public void ExecuteAsync(SampleCommand command, CancellationToken token) {}
+}
+
+...
+
+_dispatcher.ExecuteAsync(command);
+```
+
+Queries
+```
+IQueryHandler<IQuery, IQueryResponse> => IAsyncQueryHandler<IQuery, IQueryResponse>
+```
+```csharp
+public class SampleQueryResponseHandler : IAsyncQueryHandler<SampleQuery, SampleQueryResponse>
+{
+  public Task<SampleQueryResponse> ExecuteAsync(SampleQuery query, CancellationToken token) {}
+}
+
+...
+
+_dispatcher.ExecuteAsync(query);
+```
 
 ## Configuration
 ...
