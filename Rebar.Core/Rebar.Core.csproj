@@ -13,8 +13,8 @@
     <PackageTags>IoC</PackageTags>
     <Title>rebar</Title>
     <Description>Support for CQS</Description>
-    <ReleaseVersion>1.4.1</ReleaseVersion>
-    <Version>1.4.1</Version>
+    <ReleaseVersion>1.4.2</ReleaseVersion>
+    <Version>1.4.2</Version>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 

@@ -115,7 +115,7 @@ public SampleQueryResponse Execute(SampleQuery query)
 ICommandHandler<ICommand> => IAsyncCommandHandler<ICommand>
 ```
 ```csharp
-public class SampleCommandHandler : ICommandHandler<SampleCommand>
+public class SampleCommandHandler : IAsyncCommandHandler<SampleCommand>
 {
     public void ExecuteAsync(SampleCommand command, CancellationToken token) {}
 }
@@ -163,6 +163,99 @@ public class AppModule : Module
         builder.RegisterQueryHandlers(executingAssembly);
         
         // register both queries and commands within assembly
-        builder.RegisterAll();
+        builder.RegisterAll(executingAssembly);
     }
  }
+```
+### Methods
+```csharp
+ContainerBuilder RegisterCommandHandlers(self ContainerBuilder builder, ExecutingAssembly assembly, InstanceTypes instanceType, object[] lifeTimeScopeTags)
+```
+Registers commands within assembly.
+
+#### Parameters
+
+- **``builder`` ContainerBuilder**
+<br>
+Extension for AutoFac `ContainerBuilder`
+<br>
+<br>
+- **``assembly`` ExecutingAssembly**
+<br>
+Assembly that contains commands definitions.
+<br>
+<br>
+- **(optional ) ``instanceType`` InstanceTypes**
+<br>
+Instance lifecycle type for commands.
+<br>
+**default value: ``InstanceTypes.LifetimeScope``**
+<br>
+<br>
+- **(optional) ``lifeTimeScopeTags`` object[]**
+<br>
+Tag applied to matching lifetime scopes. Optional for request scope, required for matching lifetime scope.
+<br>
+**default: `null`**
+<br>
+<br>
+
+```csharp
+ContainerBuilder RegisterQueryHandlers(self ContainerBuilder builder, ExecutingAssembly assembly, InstanceTypes instanceType, object[] lifeTimeScopeTags)
+```
+Registers queries within assembly.
+#### Parameters
+- **``builder`` ContainerBuilder**
+<br>
+Extension for AutoFac `ContainerBuilder`
+<br>
+<br>
+- **``assembly`` ExecutingAssembly**
+<br>
+Assembly that contains query definitions.
+<br>
+<br>
+- **(optional ) ``instanceType`` InstanceTypes**
+<br>
+Instance lifecycle type for query.
+<br>
+**default value: ``InstanceTypes.LifetimeScope``**
+<br>
+<br>
+- **(optional) ``lifeTimeScopeTags`` object[]**
+<br>
+Tag applied to matching lifetime scopes. Optional for request scope, required for matching lifetime scope.
+<br>
+**default: `null`**
+<br>
+<br>
+
+```csharp
+ContainerBuilder RegisterAll(self ContainerBuilder builder, ExecutingAssembly assembly, InstanceTypes instanceType, object[] lifeTimeScopeTags)
+```
+Registers both commands and queries within assembly.
+#### Parameters
+- **``builder`` ContainerBuilder**
+<br>
+Extension for AutoFac `ContainerBuilder`
+<br>
+<br>
+- **``assembly`` ExecutingAssembly**
+<br>
+Assembly that contains query definitions.
+<br>
+<br>
+- **(optional ) ``instanceType`` InstanceTypes**
+<br>
+Instance lifecycle type for query.
+<br>
+**default value: ``InstanceTypes.LifetimeScope``**
+<br>
+<br>
+- **(optional) ``lifeTimeScopeTags`` object[]**
+<br>
+Tag applied to matching lifetime scopes. Optional for request scope, required for matching lifetime scope.
+<br>
+**default: `null`**
+
+
