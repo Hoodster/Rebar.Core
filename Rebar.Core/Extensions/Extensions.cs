@@ -18,7 +18,7 @@ namespace Rebar.Core
         /// Registers command handlers and adds them to DI scope.
         /// </summary>
         /// <param name="executingAssembly">Commands executing assembly.</param>
-        /// <param name="instanceType">Type of instance lifetime.</param>
+        /// <param name="instanceType">Type of instance lifecycle.</param>
         public static void RegisterCommandHandlers(this ContainerBuilder self, Assembly executingAssembly, InstanceTypes instanceType = InstanceTypes.LifetimeScope, object[] lifetimeScopeTags = null)
         {
             self.RegisterTypesPerInstanceLife(CommandHandlerAssemblyTypeSuffix, executingAssembly, instanceType, lifetimeScopeTags);
@@ -28,7 +28,7 @@ namespace Rebar.Core
         /// Registers query handlers and adds them to DI scope.
         /// </summary>
         /// <param name="executingAssembly">Queries executing assemblt.</param>
-        /// <param name="instanceType">Type of instance lifetime.</param>
+        /// <param name="instanceType">Type of instance lifecycle.</param>
         /// <param name="lifetimeScopeTags">Tag applied to matching lifetime scopes. Optional for request scope, required for matching lifetime scope.</param>
         public static void RegisterQueryHandlers(this ContainerBuilder self, Assembly executingAssembly, InstanceTypes instanceType = InstanceTypes.LifetimeScope, object[] lifetimeScopeTags = null)
         {
@@ -39,10 +39,11 @@ namespace Rebar.Core
         /// Allows to register both commands and queries at once and adds them to DI scope.
         /// </summary>
         /// <param name="executingAssembly">Commands and queries executing assembly.</param>
-        public static void RegisterAll(this ContainerBuilder self, Assembly executingAssembly, InstanceTypes instanceType = InstanceTypes.LifetimeScope)
+        /// <param name="instanceType"></param>
+        public static void RegisterAll(this ContainerBuilder self, Assembly executingAssembly, InstanceTypes instanceType = InstanceTypes.LifetimeScope, object[] lifetimeScopeTags = null)
         {
-            RegisterCommandHandlers(self, executingAssembly, instanceType);
-            RegisterQueryHandlers(self, executingAssembly, instanceType);
+            RegisterCommandHandlers(self, executingAssembly, instanceType, lifetimeScopeTags);
+            RegisterQueryHandlers(self, executingAssembly, instanceType, lifetimeScopeTags);
         }
 
         /// <summary>
