@@ -27,4 +27,4 @@ jobs:
     - name: Publish NuGet package
       run: |
         dotnet pack --configuration Release --no-build --no-restore --include-symbols
-        dotnet nuget push ./Rebar.Core/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        dotnet nuget push --skip-duplicate ./Rebar.Core/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
